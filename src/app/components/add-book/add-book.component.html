@@ -1,0 +1,40 @@
+<h1 mat-dialog-title>Add Book</h1>
+<div mat-dialog-content>
+  <form [formGroup]="bookForm" (ngSubmit)="onSubmit()">
+    <mat-form-field class="custom-width-input">
+      <input matInput placeholder="ISBN" formControlName="isbn" />
+      <mat-error *ngIf="bookForm.get('isbn')!.hasError('required')"
+        >ISBN is required</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field class="custom-width-input">
+      <input matInput placeholder="Name" formControlName="name" />
+      <mat-error *ngIf="bookForm.get('name')!.hasError('required')"
+        >Name is required</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field class="custom-width-input">
+      <mat-label>Author</mat-label>
+      <mat-select formControlName="authorId">
+        <mat-option *ngFor="let author of authors" [value]="author!._id">
+          {{ author!.first_name }} {{ author!.last_name }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="bookForm.get('authorId')!.hasError('required')"
+        >Author is required</mat-error
+      >
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button
+    mat-button
+    [disabled]="!bookForm.valid"
+    type="submit"
+    (click)="onSubmit()"
+  >
+    <span *ngIf="data?.book; else addBookText">Edit</span>
+    <ng-template #addBookText>Add</ng-template>
+  </button>
+</div>

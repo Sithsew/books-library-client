@@ -1,0 +1,23 @@
+<button
+  mat-fab
+  color="primary"
+  aria-label="Back To Book List"
+  routerLink="/books"
+>
+  <mat-icon>arrow_back</mat-icon>
+</button>
+<div class="book-details">
+  <h2>Book Details</h2>
+  <div><strong>Book Name:</strong> {{ book?.name }}</div>
+  <div>
+    <strong>Author:</strong> {{ book?.author?.first_name }}
+    {{ book?.author?.last_name }}
+  </div>
+  <div><strong>ISBN:</strong> {{ book?.isbn }}</div>
+  <div>
+    <strong>Created At:</strong> {{ book?.createdAt | date : "medium" }}
+  </div>
+  <div>
+    <strong>Updated At:</strong> {{ book?.updatedAt | date : "medium" }}
+  </div>
+</div>
