@@ -1,0 +1,48 @@
+.table-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 85vh;
+  padding: 10px;
+
+  .button-row {
+    display: flex;
+    justify-content: flex-end;
+    width: 80%;
+    padding-right: 10px;
+    margin: 10px;
+  }
+
+  .mat-elevation-z8 {
+    max-width: 80%;
+    width: 100%;
+    overflow: auto;
+
+    table {
+      width: 100%;
+      text-align: center;
+
+      th,
+      td {
+        text-align: center;
+      }
+
+      .mat-header-cell,
+      .mat-sort-header {
+        text-align: center;
+      }
+    }
+  }
+}
+
+.selected-row {
+  background-color: #e0f7fa;
+  cursor: pointer;
+}
+
+.books-list-title {
+  font-size: 1.5em;
+  margin: 15px;
+  color: #3f51b5;
+}

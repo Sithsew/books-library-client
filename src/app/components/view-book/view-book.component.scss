@@ -1,0 +1,31 @@
+button {
+    margin: 10px;
+    display: flex;
+    align-items: center;
+}
+
+button mat-icon {
+    margin-right: 5px;
+    font-size: 24px;
+}
+
+.book-details {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.book-details h2 {
+    color: #333;
+}
+
+.book-details div {
+    margin-bottom: 10px;
+}
+
+.book-details strong {
+    font-weight: bold;
+}
