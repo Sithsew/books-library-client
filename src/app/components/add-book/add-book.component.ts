@@ -1,7 +1,8 @@
-import { Component, Inject } from '@angular/core';
-import { BookService } from 'src/app/services/book.service';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+
+import { BookService } from 'src/app/services/book.service';
 import { AuthorService } from 'src/app/services/author.service';
 import { IAuthor } from 'src/app/models/author.model';
 
@@ -10,9 +11,10 @@ import { IAuthor } from 'src/app/models/author.model';
   templateUrl: './add-book.component.html',
   styleUrls: ['./add-book.component.scss'],
 })
-export class AddBookComponent {
+export class AddBookComponent implements OnInit {
   bookForm!: FormGroup;
   authors: IAuthor[] = [];
+
   constructor(
     public dialogRef: MatDialogRef<AddBookComponent>,
     private formBuilder: FormBuilder,
@@ -38,10 +40,11 @@ export class AddBookComponent {
   }
 
   populateForm(book: any): void {
+    const { name, author, isbn } = book;
     this.bookForm.setValue({
-      name: book.name,
-      authorId: book.author._id,
-      isbn: book.isbn,
+      name,
+      authorId: author._id,
+      isbn,
     });
   }
 
@@ -49,25 +52,24 @@ export class AddBookComponent {
     if (this.bookForm.valid) {
       const newBook = this.bookForm.value;
 
+      const handleResponse = (response: any, action: string): void => {
+        console.log(`Book ${action} successfully:`, response);
+        this.dialogRef.close(newBook);
+      };
+
+      const handleError = (error: any, action: string): void => {
+        console.error(`Error ${action} newBook:`, error);
+      };
+
       if (this.data && this.data.book) {
         this.bookService.update(this.data.book._id, newBook).subscribe(
-          () => {
-            console.log('Book updated successfully');
-            this.dialogRef.close(newBook);
-          },
-          (error) => {
-            console.error('Error updating book:', error);
-          }
+          (response) => handleResponse(response, 'updated'),
+          (error) => handleError(error, 'updating')
         );
       } else {
         this.bookService.create(newBook).subscribe(
-          (response) => {
-            console.log('Book added successfully:', response);
-            this.dialogRef.close(newBook);
-          },
-          (error) => {
-            console.error('Error adding book:', error);
-          }
+          (response) => handleResponse(response, 'added'),
+          (error) => handleError(error, 'adding')
         );
       }
     }
@@ -75,12 +77,12 @@ export class AddBookComponent {
 
   getAuthors(): void {
     this.authorService.getAll().subscribe(
-      (response: any) => {
+      (response: IAuthor[]) => {
         this.authors = response;
         console.log('Authors:', response);
       },
       (error) => {
-        console.error('Error :', error);
+        console.error('Error fetching authors:', error);
       }
     );
   }

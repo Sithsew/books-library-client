@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BookService } from 'src/app/services/book.service';
 
@@ -7,7 +7,7 @@ import { BookService } from 'src/app/services/book.service';
   templateUrl: './view-book.component.html',
   styleUrls: ['./view-book.component.scss'],
 })
-export class ViewBookComponent {
+export class ViewBookComponent implements OnInit {
   book: any;
 
   constructor(
@@ -16,11 +16,20 @@ export class ViewBookComponent {
   ) {}
 
   ngOnInit(): void {
+    this.loadBook();
+  }
+
+  private loadBook(): void {
     this.route.params.subscribe((params) => {
       const bookId = params['id'];
-      this.bookService.getById(bookId).subscribe((data) => {
-        this.book = data;
-      });
+      this.bookService.getById(bookId).subscribe(
+        (data) => {
+          this.book = data;
+        },
+        (error) => {
+          console.error('Error fetching book:', error);
+        }
+      );
     });
   }
 }
