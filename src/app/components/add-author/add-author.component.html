@@ -1,4 +1,7 @@
-<h1 mat-dialog-title>Add Author</h1>
+<h1 mat-dialog-title>
+  <span *ngIf="data?.author; else addAuthorText">Edit</span>
+  <ng-template #addAuthorText>Add</ng-template> Author
+</h1>
 <div mat-dialog-content>
   <form [formGroup]="authorForm" (ngSubmit)="onSubmit()">
     <mat-form-field class="custom-width-input">
