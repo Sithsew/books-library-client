@@ -10,12 +10,17 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialComponentsModule } from './components/material-components/material-components.module';
 import { AddBookComponent } from './components/add-book/add-book.component';
 import { ViewBookComponent } from './components/view-book/view-book.component';
+import { AuthorsComponent } from './components/authors/authors.component';
+import { AddAuthorComponent } from './components/add-author/add-author.component';
+import { CommonModule } from '@angular/common';
 @NgModule({
   declarations: [
     AppComponent,
     BooksComponent,
     AddBookComponent,
     ViewBookComponent,
+    AuthorsComponent,
+    AddAuthorComponent,
   ],
   imports: [
     BrowserModule,
@@ -25,6 +30,7 @@ import { ViewBookComponent } from './components/view-book/view-book.component';
     ReactiveFormsModule,
     HttpClientModule,
     MaterialComponentsModule,
+    CommonModule
   ],
   providers: [],
   bootstrap: [AppComponent],
