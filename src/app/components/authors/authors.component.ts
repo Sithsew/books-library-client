@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnInit, AfterViewInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -12,13 +12,13 @@ import { AddAuthorComponent } from '../add-author/add-author.component';
   templateUrl: './authors.component.html',
   styleUrls: ['./authors.component.scss'],
 })
-export class AuthorsComponent {
+export class AuthorsComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['first_name', 'last_name', 'actions'];
   dataSource = new MatTableDataSource<IAuthor>();
   isLoading = false;
 
   pageSizeOptions: number[] = [5, 10, 25, 100];
-  selectedAuthor: any;
+  selectedAuthor: IAuthor | null = null;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(
@@ -31,32 +31,31 @@ export class AuthorsComponent {
     this.loadAuthors();
   }
 
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+  }
+
   loadAuthors(): void {
     this.isLoading = true;
     this.authorService.getAll().subscribe(
-      (data: any) => {
+      (data: IAuthor[]) => {
         this.dataSource.data = data;
-
         this.isLoading = false;
       },
       (error) => {
         this.isLoading = false;
-        console.log(error);
+        console.error(error);
       }
     );
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-  }
-
-  openAddEditAuthorDialog(author?: any): void {
+  openAddEditAuthorDialog(author?: IAuthor): void {
     const dialogRef = this.dialog.open(AddAuthorComponent, {
       width: '350px',
       data: { author: author },
     });
 
-    dialogRef.afterClosed().subscribe((newAuthor: any) => {
+    dialogRef.afterClosed().subscribe((newAuthor: IAuthor) => {
       console.log('The dialog was closed with result:', newAuthor);
       if (newAuthor) {
         this.loadAuthors();
@@ -64,7 +63,7 @@ export class AuthorsComponent {
     });
   }
 
-  onClickEdit(author?: any): void {
+  onClickEdit(author?: IAuthor): void {
     this.openAddEditAuthorDialog(author);
   }
 
@@ -72,7 +71,7 @@ export class AuthorsComponent {
     this.openAddEditAuthorDialog();
   }
 
-  onClickDelete(authorId: string) {
+  onClickDelete(authorId: string): void {
     this.authorService.delete(authorId).subscribe(
       () => {
         this.loadAuthors();
@@ -84,10 +83,6 @@ export class AuthorsComponent {
   }
 
   onClickRow(row: IAuthor): void {
-    if (this.selectedAuthor !== row) {
-      this.selectedAuthor = row;
-    } else {
-      this.selectedAuthor = null;
-    }
+    this.selectedAuthor = this.selectedAuthor !== row ? row : null;
   }
 }

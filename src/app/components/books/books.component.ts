@@ -20,7 +20,8 @@ export class BooksComponent implements OnInit, AfterViewInit {
   pageSize = 5;
   currentPage = 0;
   pageSizeOptions: number[] = [5, 10, 25, 100];
-  selectedBook: any;
+  selectedBook: IBook | null = null;
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(
@@ -49,29 +50,29 @@ export class BooksComponent implements OnInit, AfterViewInit {
       },
       (error) => {
         this.isLoading = false;
-        console.log(error);
+        console.error(error);
       }
     );
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
   }
 
-  onPageChange(event: PageEvent) {
+  onPageChange(event: PageEvent): void {
     this.pageSize = event.pageSize;
     this.currentPage = event.pageIndex;
 
     this.loadBooks();
   }
 
-  openAddEditBookDialog(book?: any): void {
+  openAddEditBookDialog(book?: IBook): void {
     const dialogRef = this.dialog.open(AddBookComponent, {
       width: '350px',
       data: { book: book },
     });
 
-    dialogRef.afterClosed().subscribe((newBook: any) => {
+    dialogRef.afterClosed().subscribe((newBook: IBook) => {
       console.log('The dialog was closed with result:', newBook);
       if (newBook) {
         this.loadBooks();
@@ -79,7 +80,7 @@ export class BooksComponent implements OnInit, AfterViewInit {
     });
   }
 
-  onClickEdit(book?: any): void {
+  onClickEdit(book?: IBook): void {
     this.openAddEditBookDialog(book);
   }
 
@@ -87,7 +88,7 @@ export class BooksComponent implements OnInit, AfterViewInit {
     this.openAddEditBookDialog();
   }
 
-  onClickDelete(bookId: string) {
+  onClickDelete(bookId: string): void {
     this.bookService.delete(bookId).subscribe(
       () => {
         this.loadBooks();
@@ -103,10 +104,6 @@ export class BooksComponent implements OnInit, AfterViewInit {
   }
 
   onClickRow(row: IBook): void {
-    if (this.selectedBook !== row) {
-      this.selectedBook = row;
-    } else {
-      this.selectedBook = null;
-    }
+    this.selectedBook = this.selectedBook !== row ? row : null;
   }
 }
