@@ -30,7 +30,7 @@
   <button mat-button (click)="onNoClick()">Cancel</button>
   <button
     mat-button
-    [disabled]="!bookForm.valid"
+    [disabled]="!bookForm.valid || !bookForm.dirty"
     type="submit"
     (click)="onSubmit()"
   >

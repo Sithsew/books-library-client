@@ -1,0 +1,29 @@
+<h1 mat-dialog-title>Add Author</h1>
+<div mat-dialog-content>
+  <form [formGroup]="authorForm" (ngSubmit)="onSubmit()">
+    <mat-form-field class="custom-width-input">
+      <input matInput placeholder="First Name" formControlName="first_name" />
+      <mat-error *ngIf="authorForm.get('first_name')!.hasError('required')"
+        >First Name is required</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field class="custom-width-input">
+      <input matInput placeholder="Last Name" formControlName="last_name" />
+      <mat-error *ngIf="authorForm.get('last_name')!.hasError('required')"
+        >Last Name is required</mat-error
+      >
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button
+    mat-button
+    [disabled]="!authorForm.valid || !authorForm.dirty"
+    type="submit"
+    (click)="onSubmit()"
+  >
+    <span *ngIf="data?.author; else addAuthorText">Edit</span>
+    <ng-template #addAuthorText>Add</ng-template>
+  </button>
+</div>

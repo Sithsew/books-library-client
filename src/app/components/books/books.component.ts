@@ -5,7 +5,6 @@ import { IBook } from 'src/app/models/book.model';
 import { BookService } from 'src/app/services/book.service';
 import { AddBookComponent } from '../add-book/add-book.component';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSidenav } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
 
 @Component({
@@ -23,7 +22,6 @@ export class BooksComponent implements OnInit, AfterViewInit {
   pageSizeOptions: number[] = [5, 10, 25, 100];
   selectedBook: any;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild('sidenav') sidenav!: MatSidenav;
 
   constructor(
     public dialog: MatDialog,
